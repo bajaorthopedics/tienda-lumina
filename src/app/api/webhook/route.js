@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// Conectamos con Stripe usando la llave secreta
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
@@ -10,30 +9,65 @@ export async function POST(req) {
 
   let event;
 
-  // 1. Stripe toca la puerta y verificamos que sea realmente Stripe (Seguridad)
+  // 1. Verificación de seguridad de Stripe
   try {
     event = stripe.webhooks.constructEvent(payload, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.error('⚠️ Error de seguridad en el Webhook:', err.message);
+    console.error('⚠️ Error de seguridad:', err.message);
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
-  // 2. Si el pago fue 100% exitoso, extraemos los datos
+  // 2. ¡EL PAGO ES OFICIAL!
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     
-    // Sacamos la información vital del cliente
+    // Extraemos todos los datos del cliente
     const customerName = session.customer_details?.name;
     const customerEmail = session.customer_details?.email;
     const shipping = session.shipping_details?.address;
 
     console.log(`💰 ¡Pago exitoso de ${customerName}!`);
-    console.log(`📦 Dirección de envío: ${shipping?.line1}, ${shipping?.city}, ${shipping?.country}`);
 
-    // 3. AQUÍ CONECTAREMOS CON CJ DROPSHIPPING
-    // (El código de la API de CJ entrará aquí en el siguiente paso)
+    // 3. ENVIAMOS LA ORDEN AL ALMACÉN DE CJ DROPSHIPPING
+    try {
+      // Preparamos la caja con la etiqueta de envío
+      const orderData = {
+        orderNumber: session.id, // El recibo de Stripe es tu número de orden
+        shippingAddress: {
+          name: customerName,
+          phone: session.customer_details?.phone || "0000000000",
+          email: customerEmail,
+          address1: shipping?.line1,
+          city: shipping?.city,
+          province: shipping?.state,
+          countryCode: shipping?.country,
+          zip: shipping?.postal_code
+        },
+        products: [
+          {
+            sku: "SKU_PENDIENTE", // <--- Aquí pondremos el código de la depiladora
+            quantity: 1
+          }
+        ]
+      };
+
+      // Mandamos la señal electrónica a China/USA
+      const cjResponse = await fetch('https://developers.cjdropshipping.com/api2.0/v1/shopping/order/createOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CJ-Access-Token': process.env.CJ_API_KEY
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      const cjResult = await cjResponse.json();
+      console.log('📦 Respuesta del Almacén CJ:', cjResult);
+
+    } catch (error) {
+      console.error('⚠️ Error de comunicación con CJ:', error);
+    }
   }
 
-  // Le respondemos a Stripe que recibimos el mensaje fuerte y claro
   return NextResponse.json({ received: true }, { status: 200 });
 }
