@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Fiasella Premium Palette */
+  --foreground-rgb: 10, 30, 60;        /* Deep Sapphire (Casi Negro) */
+  --background-start-rgb: 255, 255, 255; /* White (Mármol) */
+  --background-end-rgb: 248, 249, 250;   /* Ultra Light Gray (Suave)
 }
 
 @theme inline {
