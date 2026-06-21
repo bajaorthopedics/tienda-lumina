@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <>
@@ -109,7 +111,12 @@ export default function Home() {
         <div className="flex flex-wrap gap-6 text-sm text-gray-400 font-light justify-center px-4">
           <span className="hover:text-[#D4AF37] transition-colors cursor-pointer">Términos del Servicio</span>
           <span className="hover:text-[#D4AF37] transition-colors cursor-pointer">Política de Privacidad</span>
-          <span className="hover:text-[#D4AF37] transition-colors cursor-pointer">Política de Reembolso</span>
+          
+          {/* EL ENLACE CONECTADO AQUÍ ABAJO */}
+          <Link href="/refund" className="hover:text-[#D4AF37] transition-colors cursor-pointer">
+            Política de Reembolso
+          </Link>
+          
           <span className="hover:text-[#D4AF37] transition-colors cursor-pointer">Contacto</span>
         </div>
         
