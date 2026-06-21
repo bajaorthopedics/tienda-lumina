@@ -19,7 +19,7 @@ export default function Home() {
 
           <div className="mt-8 w-full max-w-md mx-auto relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#D4AF37] to-[#0A1E3C] rounded-2xl blur opacity-20"></div>
-            <img src="/producto.png" alt="Depiladora Fiasella IPL" className="relative w-full h-auto object-cover rounded-2xl shadow-2xl border border-gray-100 bg-white p-2" />
+            <img src="/producto.png" alt="Depiladora Fiasella IPL" className="relative w-full h-auto object-contain rounded-2xl shadow-2xl border border-gray-100 bg-white p-4" />
           </div>
           
           <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="mt-6 px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 hover:scale-105 transition-all duration-300 shadow-xl block w-fit mx-auto">
@@ -33,7 +33,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* --- NUEVO: BARRA DE AUTORIDAD --- */}
+        {/* --- BARRA DE AUTORIDAD --- */}
         <div className="w-full border-y border-gray-200 bg-white mt-16 py-8">
           <p className="text-center text-xs font-bold tracking-widest text-gray-400 uppercase mb-4">La tecnología de la que todas hablan</p>
           <div className="flex justify-center gap-12 md:gap-24 text-gray-300 font-serif text-xl md:text-2xl opacity-70">
@@ -66,39 +66,18 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- NUEVO: SECCIÓN DE VIDEO --- */}
-        <section className="w-full max-w-5xl mx-auto mt-20 px-8">
-          <div className="bg-[#0A1E3C] rounded-3xl p-2 md:p-4 shadow-2xl overflow-hidden relative">
-            <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/30 z-10">
-              En acción
-            </div>
-            {/* Aquí cargaremos tu video corto. Se reproduce solo, sin sonido. */}
-            <video 
-              className="w-full h-[400px] md:h-[500px] object-cover rounded-2xl bg-gray-900"
-              autoPlay 
-              loop 
-              muted 
-              playsInline
-              poster="/producto.png"
-            >
-              <source src="/demo.mp4" type="video/mp4" />
-              Tu navegador no soporta videos.
-            </video>
-          </div>
-        </section>
-
-        {/* --- NUEVO: GALERÍA VISUAL --- */}
+        {/* --- SECCIÓN 3: GALERÍA VISUAL (TAMAÑOS CORREGIDOS) --- */}
         <section className="w-full max-w-6xl mx-auto mt-32 px-8">
           <h2 className="text-3xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Diseño premium. Resultados excepcionales.</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
-              <img src="/galeria1.jpg" alt="Fiasella Detalle" className="w-full h-full object-cover" />
+            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex items-center justify-center p-6">
+              <img src="/galeria1.png" alt="Fiasella Detalle" className="max-w-full max-h-full object-contain" />
             </div>
-            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
-              <img src="/galeria2.jpg" alt="Fiasella Uso" className="w-full h-full object-cover" />
+            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex items-center justify-center p-6">
+              <img src="/galeria2.png" alt="Fiasella Uso" className="max-w-full max-h-full object-contain" />
             </div>
-            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
-              <img src="/galeria3.jpg" alt="Fiasella Estilo" className="w-full h-full object-cover" />
+            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex items-center justify-center p-6">
+              <img src="/galeria3.png" alt="Fiasella Estilo" className="max-w-full max-h-full object-contain" />
             </div>
           </div>
           <p className="text-center text-sm text-gray-400 mt-6">*Imágenes ilustrativas de nuestro modelo de zafiro.</p>
