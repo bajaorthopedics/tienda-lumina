@@ -1,24 +1,35 @@
-export default function Home() {
+import Link from 'next/link';
+
+export default function Success() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-[#F8F9FA] text-[#0A1E3C]">
       
-      <div className="z-10 max-w-5xl w-full items-center justify-center text-center flex flex-col gap-8">
-        <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-widest text-[#0A1E3C]">
-          FIASELLA.
+      <div className="z-10 max-w-2xl w-full items-center justify-center text-center flex flex-col gap-6 p-12 bg-white rounded-3xl shadow-2xl border border-gray-100">
+        
+        {/* Símbolo de Éxito / Marca */}
+        <div className="text-[#D4AF37] text-6xl mb-4">✨</div>
+
+        <h1 className="text-4xl md:text-5xl font-serif font-bold tracking-wide text-[#0A1E3C]">
+          ¡Gracias por tu compra!
         </h1>
         
-        <h2 className="text-2xl md:text-4xl italic text-gray-700 mt-4">
-          Seda Pura. Luz Infinitamente Bella.
+        <h2 className="text-xl italic text-gray-600 mt-2">
+          Bienvenida al mundo Fiasella.
         </h2>
         
-        <p className="text-lg md:text-xl text-gray-500 max-w-2xl mt-4 font-light mx-auto">
-          Descubre la tecnología de luz pulsada con enfriamiento de cristal. 
-          Resultados de clínica dermatológica, desde la intimidad de tu hogar.
+        <p className="text-base text-gray-500 mt-4 font-light leading-relaxed">
+          Tu pedido ha sido confirmado exitosamente. Ya estamos preparando tu depiladora de cristal de zafiro para envío. 
+          En breve recibirás un correo electrónico con tu recibo y tu número de seguimiento.
         </p>
         
-        <button className="mt-10 px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 transition-all duration-300 shadow-xl">
-          Descubre tu Fiasella
-        </button>
+        {/* Botón para regresar a la tienda */}
+        <Link 
+          href="/"
+          className="mt-8 px-10 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-xs hover:bg-gray-800 transition-all duration-300"
+        >
+          Volver a la tienda
+        </Link>
+        
       </div>
 
     </main>
