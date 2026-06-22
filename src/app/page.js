@@ -3,13 +3,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Home() {
-  // Estado para controlar el Pop-up de ventas
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    // El pop-up aparece a los 4 segundos
     const timer1 = setTimeout(() => setShowPopup(true), 4000);
-    // Y desaparece a los 12 segundos
     const timer2 = setTimeout(() => setShowPopup(false), 12000);
     
     return () => {
@@ -39,9 +36,25 @@ export default function Home() {
             <img src="/producto.png" alt="Depiladora Fiasella IPL" className="relative w-full h-[250px] md:h-[350px] object-contain rounded-2xl shadow-2xl border border-gray-100 bg-white p-6" />
           </div>
           
-          <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="mt-6 px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl block w-fit mx-auto">
-            Descubre tu Fiasella - $129
-          </a>
+          <div className="mt-6 flex flex-col items-center w-full">
+            <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl block w-fit mx-auto">
+              Descubre tu Fiasella - $129
+            </a>
+
+            {/* --- NUEVO: GATILLO DE URGENCIA --- */}
+            <div className="mt-5 w-full max-w-[280px]">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
+                </span>
+                <p className="text-xs font-bold text-red-600 uppercase tracking-wide">Alta demanda: 7 unidades</p>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-red-600 h-1.5 rounded-full" style={{ width: '85%' }}></div>
+              </div>
+            </div>
+          </div>
 
           <div className="flex flex-col md:flex-row gap-8 mt-6 text-sm text-gray-600 font-light justify-center items-center">
             <div className="flex items-center gap-2"><span className="text-xl">📦</span> Envío Gratis</div>
@@ -131,7 +144,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECCIÓN 5: TESTIMONIOS (EXTRAÍDOS DE TU CSV) --- */}
+        {/* --- SECCIÓN 5: TESTIMONIOS --- */}
         <section className="w-full max-w-6xl mx-auto mt-32 px-8">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Lo que dicen nuestras clientas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -229,7 +242,6 @@ export default function Home() {
           </div>
         </a>
       </div>
-
     </>
   );
 }
