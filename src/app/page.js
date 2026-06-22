@@ -1,6 +1,40 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+
+// --- COMPONENTE DE ANIMACIÓN (EFECTO WOW) ---
+function FadeInSection({ children, delay = 0 }) {
+  const [isVisible, setVisible] = useState(false);
+  const domRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(entry.target); // Anima solo la primera vez que se ve
+        }
+      });
+    });
+    const currentRef = domRef.current;
+    if (currentRef) observer.observe(currentRef);
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={domRef}
+      className={`transition-all duration-1000 ease-out transform ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
@@ -17,7 +51,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="bg-[#D4AF37] text-[#0A1E3C] text-xs font-bold text-center py-2 tracking-widest uppercase">
+      <div className="bg-[#D4AF37] text-[#0A1E3C] text-xs font-bold text-center py-2 tracking-widest uppercase relative z-50">
         ✨ Envío asegurado y gratuito a todo el país activo hoy ✨
       </div>
 
@@ -25,42 +59,46 @@ export default function Home() {
         
         {/* --- SECCIÓN 1: PORTADA --- */}
         <div className="z-10 max-w-5xl w-full items-center justify-center text-center flex flex-col gap-8 pt-16 px-8">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-widest text-[#0A1E3C]">FIASELLA.</h1>
-          <h2 className="text-2xl md:text-4xl italic text-gray-700 mt-2">Seda Pura. Luz Infinitamente Bella.</h2>
-          <p className="text-lg md:text-xl text-gray-500 max-w-2xl mt-4 font-light mx-auto">
-            Descubre la tecnología de luz pulsada con enfriamiento de zafiro. Resultados de clínica dermatológica, desde la intimidad de tu hogar.
-          </p>
+          <FadeInSection>
+            <h1 className="text-5xl md:text-7xl font-serif font-bold tracking-widest text-[#0A1E3C]">FIASELLA.</h1>
+            <h2 className="text-2xl md:text-4xl italic text-gray-700 mt-2">Seda Pura. Luz Infinitamente Bella.</h2>
+            <p className="text-lg md:text-xl text-gray-500 max-w-2xl mt-4 font-light mx-auto">
+              Descubre la tecnología de luz pulsada con enfriamiento de zafiro. Resultados de clínica dermatológica, desde la intimidad de tu hogar.
+            </p>
+          </FadeInSection>
 
-          <div className="mt-8 w-full max-w-sm mx-auto relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#D4AF37] to-[#0A1E3C] rounded-2xl blur opacity-20 animate-pulse"></div>
-            <img src="/producto.png" alt="Depiladora Fiasella IPL" className="relative w-full h-[250px] md:h-[350px] object-contain rounded-2xl shadow-2xl border border-gray-100 bg-white p-6" />
-          </div>
-          
-          <div className="mt-6 flex flex-col items-center w-full">
-            <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl block w-fit mx-auto">
-              Descubre tu Fiasella - $129
-            </a>
+          <FadeInSection delay={200}>
+            <div className="mt-8 w-full max-w-sm mx-auto relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-[#D4AF37] to-[#0A1E3C] rounded-2xl blur opacity-20 animate-pulse"></div>
+              <img src="/producto.png" alt="Depiladora Fiasella IPL" className="relative w-full h-[250px] md:h-[350px] object-contain rounded-2xl shadow-2xl border border-gray-100 bg-white p-6" />
+            </div>
+            
+            <div className="mt-6 flex flex-col items-center w-full">
+              <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl block w-fit mx-auto">
+                Descubre tu Fiasella - $129
+              </a>
 
-            {/* --- NUEVO: GATILLO DE URGENCIA --- */}
-            <div className="mt-5 w-full max-w-[280px]">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
-                </span>
-                <p className="text-xs font-bold text-red-600 uppercase tracking-wide">Alta demanda: 7 unidades</p>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-red-600 h-1.5 rounded-full" style={{ width: '85%' }}></div>
+              {/* GATILLO DE URGENCIA */}
+              <div className="mt-5 w-full max-w-[280px]">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
+                  </span>
+                  <p className="text-xs font-bold text-red-600 uppercase tracking-wide">Alta demanda: 7 unidades</p>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                  <div className="bg-red-600 h-1.5 rounded-full" style={{ width: '85%' }}></div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col md:flex-row gap-8 mt-6 text-sm text-gray-600 font-light justify-center items-center">
-            <div className="flex items-center gap-2"><span className="text-xl">📦</span> Envío Gratis</div>
-            <div className="flex items-center gap-2"><span className="text-xl">🛡️</span> Garantía 90 Días</div>
-            <div className="flex items-center gap-2"><span className="text-xl">🔒</span> Pago Seguro</div>
-          </div>
+            <div className="flex flex-col md:flex-row gap-8 mt-6 text-sm text-gray-600 font-light justify-center items-center">
+              <div className="flex items-center gap-2"><span className="text-xl">📦</span> Envío Gratis</div>
+              <div className="flex items-center gap-2"><span className="text-xl">🛡️</span> Garantía 90 Días</div>
+              <div className="flex items-center gap-2"><span className="text-xl">🔒</span> Pago Seguro</div>
+            </div>
+          </FadeInSection>
         </div>
 
         {/* --- BARRA DE AUTORIDAD --- */}
@@ -76,136 +114,168 @@ export default function Home() {
 
         {/* --- SECCIÓN 2: CÓMO FUNCIONA --- */}
         <section className="w-full mt-24 py-10 px-8 text-center max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0A1E3C] mb-16">Tu rutina de belleza, simplificada.</h2>
+          <FadeInSection>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0A1E3C] mb-16">Tu rutina de belleza, simplificada.</h2>
+          </FadeInSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-[#0A1E3C] text-[#D4AF37] flex items-center justify-center text-2xl font-serif font-bold mb-6">1</div>
-              <h3 className="text-xl font-bold mb-3">Prepara</h3>
-              <p className="text-gray-500 font-light">Rasura la zona deseada de 12 a 24 horas antes para que la luz penetre en la raíz.</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-[#0A1E3C] text-[#D4AF37] flex items-center justify-center text-2xl font-serif font-bold mb-6">2</div>
-              <h3 className="text-xl font-bold mb-3">Enciende</h3>
-              <p className="text-gray-500 font-light">Selecciona el nivel de intensidad adecuado y ponte tus gafas protectoras.</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-[#0A1E3C] text-[#D4AF37] flex items-center justify-center text-2xl font-serif font-bold mb-6">3</div>
-              <h3 className="text-xl font-bold mb-3">Desliza</h3>
-              <p className="text-gray-500 font-light">Coloca el dispositivo a 90° sobre tu piel y presiona el botón. Sin dolor.</p>
-            </div>
+            <FadeInSection delay={0}>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#0A1E3C] text-[#D4AF37] flex items-center justify-center text-2xl font-serif font-bold mb-6">1</div>
+                <h3 className="text-xl font-bold mb-3">Prepara</h3>
+                <p className="text-gray-500 font-light">Rasura la zona deseada de 12 a 24 horas antes para que la luz penetre en la raíz.</p>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={200}>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#0A1E3C] text-[#D4AF37] flex items-center justify-center text-2xl font-serif font-bold mb-6">2</div>
+                <h3 className="text-xl font-bold mb-3">Enciende</h3>
+                <p className="text-gray-500 font-light">Selecciona el nivel de intensidad adecuado y ponte tus gafas protectoras.</p>
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={400}>
+              <div className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-[#0A1E3C] text-[#D4AF37] flex items-center justify-center text-2xl font-serif font-bold mb-6">3</div>
+                <h3 className="text-xl font-bold mb-3">Desliza</h3>
+                <p className="text-gray-500 font-light">Coloca el dispositivo a 90° sobre tu piel y presiona el botón. Sin dolor.</p>
+              </div>
+            </FadeInSection>
           </div>
         </section>
 
         {/* --- SECCIÓN 3: GALERÍA VISUAL --- */}
         <section className="w-full max-w-6xl mx-auto mt-32 px-8">
-          <h2 className="text-3xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Diseño premium. Resultados excepcionales.</h2>
+          <FadeInSection>
+            <h2 className="text-3xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Diseño premium. Resultados excepcionales.</h2>
+          </FadeInSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
-              <img src="/galeria1.png" alt="Fiasella Detalle" className="w-full h-full object-contain" />
-            </div>
-            <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
-              <img src="/galeria2.png" alt="Fiasella Uso" className="w-full h-full object-contain" />
-            </div>
-            <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
-              <img src="/galeria3.png" alt="Fiasella Estilo" className="w-full h-full object-contain" />
-            </div>
+            <FadeInSection delay={0}>
+              <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
+                <img src="/galeria1.png" alt="Fiasella Detalle" className="w-full h-full object-contain" />
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={200}>
+              <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
+                <img src="/galeria2.png" alt="Fiasella Uso" className="w-full h-full object-contain" />
+              </div>
+            </FadeInSection>
+            <FadeInSection delay={400}>
+              <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
+                <img src="/galeria3.png" alt="Fiasella Estilo" className="w-full h-full object-contain" />
+              </div>
+            </FadeInSection>
           </div>
-          <p className="text-center text-sm text-gray-400 mt-6">*Imágenes ilustrativas de nuestro modelo de zafiro.</p>
+          <FadeInSection delay={600}>
+            <p className="text-center text-sm text-gray-400 mt-6">*Imágenes ilustrativas de nuestro modelo de zafiro.</p>
+          </FadeInSection>
         </section>
 
         {/* --- SECCIÓN 4: TABLA DE COMPARACIÓN --- */}
         <section className="w-full max-w-4xl mx-auto mt-32 px-8">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#0A1E3C] mb-12">La inversión más inteligente</h2>
-          <div className="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-200">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-[#0A1E3C] text-white">
-                  <th className="p-4 font-serif font-bold border-b border-gray-700">Característica</th>
-                  <th className="p-4 font-serif font-bold border-b border-gray-700 text-[#D4AF37]">Fiasella IPL</th>
-                  <th className="p-4 font-serif font-light border-b border-gray-700">Láser en Clínica</th>
-                  <th className="p-4 font-serif font-light border-b border-gray-700">Cera</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm font-light text-gray-600">
-                <tr className="border-b border-gray-100">
-                  <td className="p-4 font-medium text-[#0A1E3C]">Costo total</td>
-                  <td className="p-4 bg-[#fcfaf5] font-bold text-[#0A1E3C]">$129 (Pago único)</td>
-                  <td className="p-4">+$1,000 USD</td>
-                  <td className="p-4">+$300 USD al año</td>
-                </tr>
-                <tr className="border-b border-gray-100">
-                  <td className="p-4 font-medium text-[#0A1E3C]">Dolor</td>
-                  <td className="p-4 bg-[#fcfaf5] text-green-600 font-medium">Sin dolor (Zafiro)</td>
-                  <td className="p-4">Moderado / Alto</td>
-                  <td className="p-4 text-red-500">Alto</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <FadeInSection>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#0A1E3C] mb-12">La inversión más inteligente</h2>
+            <div className="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-200">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#0A1E3C] text-white">
+                    <th className="p-4 font-serif font-bold border-b border-gray-700">Característica</th>
+                    <th className="p-4 font-serif font-bold border-b border-gray-700 text-[#D4AF37]">Fiasella IPL</th>
+                    <th className="p-4 font-serif font-light border-b border-gray-700">Láser en Clínica</th>
+                    <th className="p-4 font-serif font-light border-b border-gray-700">Cera</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm font-light text-gray-600">
+                  <tr className="border-b border-gray-100">
+                    <td className="p-4 font-medium text-[#0A1E3C]">Costo total</td>
+                    <td className="p-4 bg-[#fcfaf5] font-bold text-[#0A1E3C]">$129 (Pago único)</td>
+                    <td className="p-4">+$1,000 USD</td>
+                    <td className="p-4">+$300 USD al año</td>
+                  </tr>
+                  <tr className="border-b border-gray-100">
+                    <td className="p-4 font-medium text-[#0A1E3C]">Dolor</td>
+                    <td className="p-4 bg-[#fcfaf5] text-green-600 font-medium">Sin dolor (Zafiro)</td>
+                    <td className="p-4">Moderado / Alto</td>
+                    <td className="p-4 text-red-500">Alto</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </FadeInSection>
         </section>
 
         {/* --- SECCIÓN 5: TESTIMONIOS --- */}
         <section className="w-full max-w-6xl mx-auto mt-32 px-8">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Lo que dicen nuestras clientas</h2>
+          <FadeInSection>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Lo que dicen nuestras clientas</h2>
+          </FadeInSection>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
-                <span className="text-xs text-gray-400">Chile</span>
+            <FadeInSection delay={0}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
+                  <span className="text-xs text-gray-400">Chile</span>
+                </div>
+                <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"Impecable, la compré para mi mamá porque tuve buenos resultados con la mía. Los vellitos tardan en desaparecer, pero con paciencia se van todos."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">F</div>
+                  <p className="text-[#0A1E3C] font-semibold text-sm">F***z</p>
+                </div>
               </div>
-              <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"Impecable, la compré para mi mamá porque tuve buenos resultados con la mía. Los vellitos tardan en desaparecer, pero con paciencia se van todos."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">F</div>
-                <p className="text-[#0A1E3C] font-semibold text-sm">F***z</p>
-              </div>
-            </div>
+            </FadeInSection>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
-                <span className="text-xs text-gray-400">Chile</span>
+            <FadeInSection delay={150}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
+                  <span className="text-xs text-gray-400">Chile</span>
+                </div>
+                <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"Llegó súper rápido, en solo 9 días. Ya la empecé a usar y se siente de excelente calidad y sin dolor."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">M</div>
+                  <p className="text-[#0A1E3C] font-semibold text-sm">M***o</p>
+                </div>
               </div>
-              <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"Llegó súper rápido, en solo 9 días. Ya la empecé a usar y se siente de excelente calidad y sin dolor."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">M</div>
-                <p className="text-[#0A1E3C] font-semibold text-sm">M***o</p>
-              </div>
-            </div>
+            </FadeInSection>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
-                <span className="text-xs text-gray-400">México</span>
+            <FadeInSection delay={300}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
+                  <span className="text-xs text-gray-400">México</span>
+                </div>
+                <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"Wow, realmente funciona. Llevo un par de semanas y ya noto la diferencia, solo necesitas constancia para ver los resultados finales."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">M</div>
+                  <p className="text-[#0A1E3C] font-semibold text-sm">M***a</p>
+                </div>
               </div>
-              <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"Wow, realmente funciona. Llevo un par de semanas y ya noto la diferencia, solo necesitas constancia para ver los resultados finales."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">M</div>
-                <p className="text-[#0A1E3C] font-semibold text-sm">M***a</p>
-              </div>
-            </div>
+            </FadeInSection>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform">
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
-                <span className="text-xs text-gray-400">Colombia</span>
+            <FadeInSection delay={450}>
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:-translate-y-1 transition-transform h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-[#D4AF37] tracking-widest text-sm">★★★★★</div>
+                  <span className="text-xs text-gray-400">Colombia</span>
+                </div>
+                <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"El empaque es excelente. Llegó exactamente como en la descripción y funciona de maravilla. La recomiendo 100%."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">A</div>
+                  <p className="text-[#0A1E3C] font-semibold text-sm">A***z</p>
+                </div>
               </div>
-              <p className="text-gray-600 font-light italic mb-6 flex-grow text-sm">"El empaque es excelente. Llegó exactamente como en la descripción y funciona de maravilla. La recomiendo 100%."</p>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#0A1E3C] text-white flex items-center justify-center text-xs font-bold">A</div>
-                <p className="text-[#0A1E3C] font-semibold text-sm">A***z</p>
-              </div>
-            </div>
+            </FadeInSection>
 
           </div>
         </section>
 
         {/* --- LLAMADO A LA ACCIÓN FINAL --- */}
         <section className="w-full bg-[#0A1E3C] text-white py-20 text-center px-8 mt-20">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">¿Lista para piel de seda?</h2>
-          <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="px-12 py-4 bg-white text-[#0A1E3C] font-bold tracking-widest uppercase text-sm hover:bg-[#D4AF37] hover:text-white transition-all shadow-xl inline-block mt-8">
-            Comprar Fiasella - $129
-          </a>
+          <FadeInSection>
+            <h2 className="text-3xl md:text-5xl font-serif font-bold mb-6">¿Lista para piel de seda?</h2>
+            <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="px-12 py-4 bg-white text-[#0A1E3C] font-bold tracking-widest uppercase text-sm hover:bg-[#D4AF37] hover:text-white transition-all shadow-xl inline-block mt-8">
+              Comprar Fiasella - $129
+            </a>
+          </FadeInSection>
         </section>
 
       </main>
