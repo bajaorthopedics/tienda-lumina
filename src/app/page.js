@@ -17,9 +17,14 @@ export default function Home() {
             Descubre la tecnología de luz pulsada con enfriamiento de zafiro. Resultados de clínica dermatológica, desde la intimidad de tu hogar.
           </p>
 
-          <div className="mt-8 w-full max-w-md mx-auto relative">
+          {/* TAMAÑO FORZADO DE LA IMAGEN PRINCIPAL */}
+          <div className="mt-8 w-full max-w-sm mx-auto relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-[#D4AF37] to-[#0A1E3C] rounded-2xl blur opacity-20"></div>
-            <img src="/producto.png" alt="Depiladora Fiasella IPL" className="relative w-full h-auto object-contain rounded-2xl shadow-2xl border border-gray-100 bg-white p-4" />
+            <img 
+              src="/producto.png" 
+              alt="Depiladora Fiasella IPL" 
+              className="relative w-full h-[250px] md:h-[350px] object-contain rounded-2xl shadow-2xl border border-gray-100 bg-white p-6" 
+            />
           </div>
           
           <a href="https://buy.stripe.com/6oU5kF9j9dWj5gpcae04800" className="mt-6 px-12 py-4 bg-[#0A1E3C] text-[#D4AF37] font-medium tracking-widest uppercase text-sm hover:bg-gray-800 hover:scale-105 transition-all duration-300 shadow-xl block w-fit mx-auto">
@@ -66,18 +71,18 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECCIÓN 3: GALERÍA VISUAL (TAMAÑOS CORREGIDOS) --- */}
+        {/* --- SECCIÓN 3: GALERÍA VISUAL TAMAÑO FORZADO --- */}
         <section className="w-full max-w-6xl mx-auto mt-32 px-8">
           <h2 className="text-3xl font-serif font-bold text-center text-[#0A1E3C] mb-12">Diseño premium. Resultados excepcionales.</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex items-center justify-center p-6">
-              <img src="/galeria1.png" alt="Fiasella Detalle" className="max-w-full max-h-full object-contain" />
+            <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
+              <img src="/galeria1.png" alt="Fiasella Detalle" className="w-full h-full object-contain" />
             </div>
-            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex items-center justify-center p-6">
-              <img src="/galeria2.png" alt="Fiasella Uso" className="max-w-full max-h-full object-contain" />
+            <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
+              <img src="/galeria2.png" alt="Fiasella Uso" className="w-full h-full object-contain" />
             </div>
-            <div className="h-[300px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex items-center justify-center p-6">
-              <img src="/galeria3.png" alt="Fiasella Estilo" className="max-w-full max-h-full object-contain" />
+            <div className="h-[250px] bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all p-6">
+              <img src="/galeria3.png" alt="Fiasella Estilo" className="w-full h-full object-contain" />
             </div>
           </div>
           <p className="text-center text-sm text-gray-400 mt-6">*Imágenes ilustrativas de nuestro modelo de zafiro.</p>
